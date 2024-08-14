@@ -52,8 +52,12 @@ OBJECTS_DIR   = ./
 
 ####### Files
 
-SOURCES       = ../Sports_car/main.cpp 
-OBJECTS       = main.o
+SOURCES       = ../Sports_car/Car.cpp \
+		../Sports_car/Sportscar.cpp \
+		../Sports_car/main.cpp 
+OBJECTS       = Car.o \
+		Sportscar.o \
+		main.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/linux.conf \
@@ -124,6 +128,7 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt_config.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_post.prf \
+		../Sports_car/.qmake.stash \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exclusive_builds.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/toolchain.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf \
@@ -141,7 +146,10 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exceptions.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
-		../Sports_car/Sports_car.pro  ../Sports_car/main.cpp
+		../Sports_car/Sports_car.pro ../Sports_car/Car.h \
+		../Sports_car/Sportscar.h ../Sports_car/Car.cpp \
+		../Sports_car/Sportscar.cpp \
+		../Sports_car/main.cpp
 QMAKE_TARGET  = Sports_car
 DESTDIR       = 
 TARGET        = Sports_car
@@ -223,6 +231,7 @@ Makefile: ../Sports_car/Sports_car.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/lin
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt_config.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exclusive_builds.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/toolchain.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf \
@@ -312,6 +321,7 @@ Makefile: ../Sports_car/Sports_car.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/lin
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt_config.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_post.prf:
+.qmake.stash:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exclusive_builds.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/toolchain.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf:
@@ -345,7 +355,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../Sports_car/main.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../Sports_car/Car.h ../Sports_car/Sportscar.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../Sports_car/Car.cpp ../Sports_car/Sportscar.cpp ../Sports_car/main.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -393,7 +404,15 @@ compiler_clean: compiler_moc_predefs_clean
 
 ####### Compile
 
-main.o: ../Sports_car/main.cpp 
+Car.o: ../Sports_car/Car.cpp ../Sports_car/Car.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Car.o ../Sports_car/Car.cpp
+
+Sportscar.o: ../Sports_car/Sportscar.cpp ../Sports_car/Sportscar.h \
+		../Sports_car/Car.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Sportscar.o ../Sports_car/Sportscar.cpp
+
+main.o: ../Sports_car/main.cpp ../Sports_car/Car.h \
+		../Sports_car/Sportscar.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../Sports_car/main.cpp
 
 ####### Install
