@@ -52,8 +52,12 @@ OBJECTS_DIR   = ./
 
 ####### Files
 
-SOURCES       = ../Modeling_car/main.cpp 
-OBJECTS       = main.o
+SOURCES       = ../Modeling_car/Car.cpp \
+		../Modeling_car/Part.cpp \
+		../Modeling_car/main.cpp 
+OBJECTS       = Car.o \
+		Part.o \
+		main.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/linux.conf \
@@ -142,7 +146,10 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exceptions.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
-		../Modeling_car/Modeling_car.pro  ../Modeling_car/main.cpp
+		../Modeling_car/Modeling_car.pro ../Modeling_car/Car.h \
+		../Modeling_car/Part.h ../Modeling_car/Car.cpp \
+		../Modeling_car/Part.cpp \
+		../Modeling_car/main.cpp
 QMAKE_TARGET  = Modeling_car
 DESTDIR       = 
 TARGET        = Modeling_car
@@ -348,7 +355,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../Modeling_car/main.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../Modeling_car/Car.h ../Modeling_car/Part.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../Modeling_car/Car.cpp ../Modeling_car/Part.cpp ../Modeling_car/main.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -396,7 +404,15 @@ compiler_clean: compiler_moc_predefs_clean
 
 ####### Compile
 
-main.o: ../Modeling_car/main.cpp 
+Car.o: ../Modeling_car/Car.cpp ../Modeling_car/Car.h \
+		../Modeling_car/Part.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Car.o ../Modeling_car/Car.cpp
+
+Part.o: ../Modeling_car/Part.cpp ../Modeling_car/Part.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Part.o ../Modeling_car/Part.cpp
+
+main.o: ../Modeling_car/main.cpp ../Modeling_car/Car.h \
+		../Modeling_car/Part.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../Modeling_car/main.cpp
 
 ####### Install
